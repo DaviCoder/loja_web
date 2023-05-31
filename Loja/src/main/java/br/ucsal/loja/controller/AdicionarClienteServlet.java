@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import br.ucsal.loja.builder.ClienteBuilder;
 import br.ucsal.loja.dao.ClienteDAO;
 import br.ucsal.loja.model.Cliente;
 
@@ -36,15 +37,21 @@ public class AdicionarClienteServlet extends HttpServlet {
 		String bairro = request.getParameter("bairro");
 		String cidade = request.getParameter("cidade");
 		String estado = request.getParameter("estado");
+		
+		ClienteBuilder clienteBuilder = ClienteBuilder.umCliente();
+		
+		Cliente cliente = clienteBuilder.mas().comNome(nome).comCpf(cpf).comBairro(bairro)
+				.comCidade(cidade).comEstado(estado).comLogradouro(logradouro).comNumero(numero)
+				.build();
 
-		Cliente cliente = new Cliente();
-		cliente.setNome(nome);
-		cliente.setCpf(cpf);
-		cliente.setLogradouro(logradouro);
-		cliente.setNumero(numero);
-		cliente.setBairro(bairro);
-		cliente.setCidade(cidade);
-		cliente.setEstado(estado);
+//		Cliente cliente = new Cliente();
+//		cliente.setNome(nome);
+//		cliente.setCpf(cpf);
+//		cliente.setLogradouro(logradouro);
+//		cliente.setNumero(numero);
+//		cliente.setBairro(bairro);
+//		cliente.setCidade(cidade);
+//		cliente.setEstado(estado);
 
 		ClienteDAO dao = new ClienteDAO();
 		dao.inserir(cliente);
