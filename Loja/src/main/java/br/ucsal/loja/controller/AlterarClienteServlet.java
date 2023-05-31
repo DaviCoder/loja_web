@@ -10,10 +10,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import br.ucsal.loja.builder.ClienteBuilder;
 import br.ucsal.loja.dao.ClienteDAO;
-import br.ucsal.loja.dao.ProdutoDAO;
 import br.ucsal.loja.model.Cliente;
-import br.ucsal.loja.model.Produto;
+
 
 /**
 
@@ -58,15 +58,10 @@ public class AlterarClienteServlet extends HttpServlet {
 		String cidade = request.getParameter("cidade");
 		String estado = request.getParameter("estado");
 
-		Cliente cliente = new Cliente();
-		cliente.setId(id);
-		cliente.setNome(nome);
-		cliente.setCpf(cpf);
-		cliente.setLogradouro(logradouro);
-		cliente.setNumero(numero);
-		cliente.setBairro(bairro);
-		cliente.setCidade(cidade);
-		cliente.setEstado(estado);
+		ClienteBuilder clienteBuilder = ClienteBuilder.umCliente();
+		Cliente cliente = clienteBuilder.mas().comId(id).comNome(nome).comCpf(cpf).comBairro(bairro)
+				.comCidade(cidade).comEstado(estado).comLogradouro(logradouro).comNumero(numero)
+				.build();
 		
 		ClienteDAO dao = new ClienteDAO();
 		dao.altera(cliente);

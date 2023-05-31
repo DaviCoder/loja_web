@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import br.ucsal.loja.builder.ProdutoBuilder;
 import br.ucsal.loja.dao.ProdutoDAO;
 import br.ucsal.loja.model.Produto;
 
@@ -38,11 +39,17 @@ public class AlterarProdutoServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		Produto produto = new Produto();
-		produto.setName("name");
-		produto.setEmail("email");
-		produto.setDescription("description");
-		produto.setStatus("status");
+		
+		String nome = request.getParameter("nome");
+		String status = request.getParameter("status");
+		String email = request.getParameter("email");
+		String description = request.getParameter("description");
+		
+		
+		ProdutoBuilder produtoBuilder = ProdutoBuilder.umProduto();
+		Produto produto = produtoBuilder.mas().comName(nome).comEmail(email).comStatus(status)
+				.comDescription(description).build();
+		
 		ProdutoDAO dao=new ProdutoDAO();
 		dao.altera(produto);
 		

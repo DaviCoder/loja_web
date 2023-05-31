@@ -1,5 +1,6 @@
 package br.ucsal.loja.builder;
 
+import br.ucsal.loja.model.Papel;
 import br.ucsal.loja.model.Usuario;
 
 public class UsuarioBuilder {
@@ -8,11 +9,13 @@ public class UsuarioBuilder {
 	private static final Long DEFAULT_ID = null;
 	private static final String DEFAULT_EMAIL = null;
 	private static final String DEFAULT_SENHA = null;
+	private static final Papel DEFAULT_PAPEL = null;
 	
 	
 	private Long id = DEFAULT_ID;
 	private String email = DEFAULT_EMAIL;
 	private String senha = DEFAULT_SENHA;
+	private Papel papel = DEFAULT_PAPEL;
 	
 	private UsuarioBuilder() {
 		
@@ -39,8 +42,13 @@ public class UsuarioBuilder {
 		return this;
 	}
 	
+	public UsuarioBuilder comPapel(Papel papel) {
+		this.papel = papel;
+		return this;
+	}
+	
 	public UsuarioBuilder mas() {
-		return new UsuarioBuilder().comEmail(email).comSenha(senha).comId(id);
+		return new UsuarioBuilder().comEmail(email).comSenha(senha).comId(id).comPapel(papel);
 	}
 	
 	public Usuario build() {

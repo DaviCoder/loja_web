@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.ucsal.loja.builder.ClienteBuilder;
 import br.ucsal.loja.model.Cliente;
 
 public class ClienteDAO {
@@ -38,7 +39,8 @@ public class ClienteDAO {
 	}
 
 	public Cliente getCliente(Long id) {
-		Cliente cliente = null;
+		ClienteBuilder clienteBuilder = ClienteBuilder.umCliente();
+		Cliente cliente = clienteBuilder.build();
 		try {
 			String sql = "select * from cliente where id=?";
 			PreparedStatement stmt = this.connection.prepareStatement(sql);
@@ -46,15 +48,11 @@ public class ClienteDAO {
 			ResultSet rs = stmt.executeQuery();
 			
 			if(rs.next()) {
-				cliente = new Cliente();
-				cliente.setId(rs.getLong("id"));
-				cliente.setNome(rs.getString("nome"));
-				cliente.setCpf(rs.getString("cpf"));
-				cliente.setLogradouro(rs.getString("logradouro"));
-				cliente.setNumero(rs.getLong("numero"));
-				cliente.setBairro(rs.getString("bairro"));
-				cliente.setCidade(rs.getString("cidade"));
-				cliente.setEstado(rs.getString("estado"));				
+				cliente = clienteBuilder.mas().comNome(rs.getString("nome")).comId(rs.getLong("id"))
+						.comCpf(rs.getString("cpf")).comLogradouro(rs.getString("logradouro"))
+						.comBairro(rs.getString("bairro")).comNumero(rs.getLong("numero"))
+						.comEstado(rs.getString("estado")).comCidade(rs.getString("cidade"))
+						.build();						
 			}
 			stmt.close();
 			rs.close();
@@ -71,15 +69,12 @@ public class ClienteDAO {
 			PreparedStatement stmt = this.connection.prepareStatement(sql);
 			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
-				Cliente cliente = new Cliente();
-				cliente.setId(rs.getLong("id"));
-				cliente.setNome(rs.getString("nome"));
-				cliente.setCpf(rs.getString("cpf"));
-				cliente.setLogradouro(rs.getString("logradouro"));
-				cliente.setNumero(rs.getLong("numero"));
-				cliente.setBairro(rs.getString("bairro"));
-				cliente.setCidade(rs.getString("cidade"));
-				cliente.setEstado(rs.getString("estado"));
+				ClienteBuilder clienteBuilder = ClienteBuilder.umCliente();
+				Cliente cliente = clienteBuilder.mas().comNome(rs.getString("nome")).comId(rs.getLong("id"))
+						.comCpf(rs.getString("cpf")).comLogradouro(rs.getString("logradouro"))
+						.comBairro(rs.getString("bairro")).comNumero(rs.getLong("numero"))
+						.comEstado(rs.getString("estado")).comCidade(rs.getString("cidade"))
+						.build();
 				clientes.add(cliente);
 			}
 			rs.close();

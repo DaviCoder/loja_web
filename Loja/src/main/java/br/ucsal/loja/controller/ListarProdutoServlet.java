@@ -3,7 +3,7 @@ package br.ucsal.loja.controller;
 import java.io.IOException;
 import java.util.List;
 
-import javax.jws.WebService;
+
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;

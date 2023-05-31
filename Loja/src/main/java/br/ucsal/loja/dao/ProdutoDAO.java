@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.ucsal.loja.builder.ProdutoBuilder;
 import br.ucsal.loja.model.Produto;
 
 public class ProdutoDAO {
@@ -40,12 +41,10 @@ public class ProdutoDAO {
 			PreparedStatement stmt = this.connection.prepareStatement(sql);
 			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
-				Produto produto = new Produto();
-				produto.setId(rs.getLong("id"));
-				produto.setName(rs.getString("name"));
-				produto.setStatus(rs.getString("status"));
-				produto.setEmail(rs.getString("email"));
-				produto.setDescription(rs.getString("description"));
+				ProdutoBuilder produtoBuilder = ProdutoBuilder.umProduto();
+				Produto produto = produtoBuilder.mas().comName(rs.getString("nome"))
+						.comEmail(rs.getString("email")).comStatus(rs.getString("status"))
+						.comDescription(rs.getString("description")).build();
 				produtos.add(produto);
 			}
 			rs.close();
@@ -57,19 +56,17 @@ public class ProdutoDAO {
 	}
 
 	public Produto obter(Long id) {
-		Produto produto = null;
+		ProdutoBuilder produtoBuilder = ProdutoBuilder.umProduto();
+		Produto produto = produtoBuilder.build();
 		String sql = "select (id,name, status, email, description) where id=?";
 		try {
 			PreparedStatement stmt = connection.prepareStatement(sql);
 			stmt.setLong(1, id);
 			ResultSet rs = stmt.executeQuery();
 			if (rs.next()) {
-				produto = new Produto();
-				produto.setId(rs.getLong("id"));
-				produto.setName(rs.getString("name"));
-				produto.setStatus(rs.getString("status"));
-				produto.setEmail(rs.getString("email"));
-				produto.setDescription(rs.getString("description"));
+				produto = produtoBuilder.mas().comName(rs.getString("nome"))
+						.comEmail(rs.getString("email")).comStatus(rs.getString("status"))
+						.comDescription(rs.getString("description")).build();
 			}
 			stmt.close();
 		} catch (SQLException e) {

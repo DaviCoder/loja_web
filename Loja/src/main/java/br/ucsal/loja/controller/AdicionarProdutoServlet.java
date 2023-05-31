@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import br.ucsal.loja.builder.ProdutoBuilder;
 import br.ucsal.loja.dao.ProdutoDAO;
 import br.ucsal.loja.model.Produto;
 
@@ -28,11 +29,11 @@ public class AdicionarProdutoServlet extends HttpServlet{
 		String email = request.getParameter("email");
 		String description = request.getParameter("description");
 
-		Produto produto = new Produto(nome, status, email, description);
-		produto.setName(nome);
-		produto.setStatus(status);
-		produto.setEmail(email);
-		produto.setDescription(description);
+		
+		ProdutoBuilder produtoBuilder = ProdutoBuilder.umProduto();
+		Produto produto = produtoBuilder.mas().comName(nome).comEmail(email).comStatus(status)
+				.comDescription(description).build();
+		
 		ProdutoDAO dao = new ProdutoDAO();
 		dao.inserir(produto);
 

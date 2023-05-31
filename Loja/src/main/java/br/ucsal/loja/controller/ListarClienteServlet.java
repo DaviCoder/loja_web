@@ -3,7 +3,7 @@ package br.ucsal.loja.controller;
 import java.io.IOException;
 import java.util.List;
 
-import javax.jws.WebService;
+
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -12,9 +12,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import br.ucsal.loja.dao.ClienteDAO;
-import br.ucsal.loja.dao.ProdutoDAO;
+
 import br.ucsal.loja.model.Cliente;
-import br.ucsal.loja.model.Produto;
+
 
 /**
 
