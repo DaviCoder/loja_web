@@ -3,7 +3,6 @@ package br.ucsal.loja.controller;
 import java.io.IOException;
 import java.util.List;
 
-import javax.jws.WebService;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -12,7 +11,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import br.ucsal.loja.dao.ClienteDAO;
+import br.ucsal.loja.dao.IDAO;
 import br.ucsal.loja.dao.ProdutoDAO;
+import br.ucsal.loja.factories.DAOFactorySingleton;
 import br.ucsal.loja.model.Cliente;
 import br.ucsal.loja.model.Produto;
 
@@ -24,6 +25,7 @@ import br.ucsal.loja.model.Produto;
 @WebServlet("/ListarClientesServlet")
 public class ListarClienteServlet  extends HttpServlet{
 	private static final long serialVersionUID = 1L;
+	private DAOFactorySingleton daoFactorySingleton = DAOFactorySingleton.getInstance();
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -38,8 +40,8 @@ public class ListarClienteServlet  extends HttpServlet{
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		ClienteDAO dao =  new ClienteDAO();
-		List<Cliente> clientes  = dao.getLista();
+		IDAO dao =  daoFactorySingleton.getClienteDAO();
+		List<Cliente> clientes  = dao.listar();
 		request.setAttribute("clientes", clientes);
 		RequestDispatcher requestDispatcher =   request.getRequestDispatcher("ListarClientes.jsp");
 		requestDispatcher.forward(request, response);

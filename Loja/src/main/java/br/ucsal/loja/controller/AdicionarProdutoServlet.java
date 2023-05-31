@@ -10,16 +10,15 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import br.ucsal.loja.dao.IDAO;
 import br.ucsal.loja.dao.ProdutoDAO;
+import br.ucsal.loja.factories.DAOFactorySingleton;
 import br.ucsal.loja.model.Produto;
 
 @WebServlet("/AdicionarProdutoServlet")
 public class AdicionarProdutoServlet extends HttpServlet{
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
+	private DAOFactorySingleton daoFactorySingleton = DAOFactorySingleton.getInstance();
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -33,10 +32,10 @@ public class AdicionarProdutoServlet extends HttpServlet{
 		produto.setStatus(status);
 		produto.setEmail(email);
 		produto.setDescription(description);
-		ProdutoDAO dao = new ProdutoDAO();
+		IDAO dao = daoFactorySingleton.getProdutoDAO();
 		dao.inserir(produto);
 
-		List<Produto> lista = dao.getLista();
+		List<Produto> lista = dao.listar();
 		request.setAttribute("produtos", lista);
 		RequestDispatcher requestDispatcher = request.getRequestDispatcher("ListarProduto.jsp");
 		requestDispatcher.forward(request, response);

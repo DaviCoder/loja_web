@@ -10,6 +10,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import br.ucsal.loja.dao.ClienteDAO;
+import br.ucsal.loja.dao.IDAO;
+import br.ucsal.loja.factories.DAOFactorySingleton;
+import br.ucsal.loja.factories.SingleFactory;
 import br.ucsal.loja.model.Cliente;
 
 /**
@@ -21,11 +24,8 @@ import br.ucsal.loja.model.Cliente;
 
 @WebServlet("/AdicionarClienteServlet")
 public class AdicionarClienteServlet extends HttpServlet {
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
+	private DAOFactorySingleton daoFactorySingleton = DAOFactorySingleton.getInstance();
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -46,7 +46,7 @@ public class AdicionarClienteServlet extends HttpServlet {
 		cliente.setCidade(cidade);
 		cliente.setEstado(estado);
 
-		ClienteDAO dao = new ClienteDAO();
+		IDAO dao = daoFactorySingleton.getClienteDAO();
 		dao.inserir(cliente);
 
 		response.sendRedirect("ListarClientesServlet");

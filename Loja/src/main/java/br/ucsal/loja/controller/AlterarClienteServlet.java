@@ -11,7 +11,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import br.ucsal.loja.dao.ClienteDAO;
+import br.ucsal.loja.dao.IDAO;
 import br.ucsal.loja.dao.ProdutoDAO;
+import br.ucsal.loja.factories.DAOFactorySingleton;
 import br.ucsal.loja.model.Cliente;
 import br.ucsal.loja.model.Produto;
 
@@ -24,6 +26,7 @@ import br.ucsal.loja.model.Produto;
 @WebServlet("/AlterarClienteServlet")
 public class AlterarClienteServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private DAOFactorySingleton daoFactorySingleton = DAOFactorySingleton.getInstance();
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -39,7 +42,7 @@ public class AlterarClienteServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Long id = Long.parseLong(request.getParameter("id"));
 		ClienteDAO dao = new ClienteDAO();
-		Cliente cliente = dao.getCliente(id);
+		Cliente cliente = dao.obter(id);
 		request.setAttribute("cliente", cliente);
 		RequestDispatcher dispatcher = request.getRequestDispatcher("AlterarClienteForm.jsp");
 		dispatcher.forward(request, response);
@@ -68,10 +71,10 @@ public class AlterarClienteServlet extends HttpServlet {
 		cliente.setCidade(cidade);
 		cliente.setEstado(estado);
 		
-		ClienteDAO dao = new ClienteDAO();
-		dao.altera(cliente);
+		IDAO dao = daoFactorySingleton.getClienteDAO();
+		dao.alterar(cliente);
 		
-		List<Cliente> lista = dao.getLista();
+		List<Cliente> lista = dao.listar();
 		request.setAttribute("clientes", lista);
 		RequestDispatcher requestDispatcher = request.getRequestDispatcher("ListarClientes.jsp");
 		requestDispatcher.forward(request, response);

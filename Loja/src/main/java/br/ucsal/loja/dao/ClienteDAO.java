@@ -1,6 +1,5 @@
 package br.ucsal.loja.dao;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -9,18 +8,19 @@ import java.util.List;
 
 import br.ucsal.loja.model.Cliente;
 
-public class ClienteDAO {
+public class ClienteDAO implements IDAO<Cliente> {
 
-	private Connection connection;
 
 	public ClienteDAO() {
-		this.connection = ConnectionFactory.getConnection();
+
 	}
 
+	@Override
 	public void inserir(Cliente cliente) {
 		String sql = "insert into cliente (nome, cpf, logradouro, numero, bairro, cidade, estado) values (?, ?, ?, ?, ?, ?, ?)";
 		try {
-			PreparedStatement stmt = connection.prepareStatement(sql);
+
+			PreparedStatement stmt = connection(ConnectionFactory.getConnection()).prepareStatement(sql);
 
 			stmt.setString(1, cliente.getNome());
 			stmt.setString(2, cliente.getCpf());
@@ -37,14 +37,15 @@ public class ClienteDAO {
 
 	}
 
-	public Cliente getCliente(Long id) {
+	@Override
+	public Cliente obter(Long id) {
 		Cliente cliente = null;
 		try {
 			String sql = "select * from cliente where id=?";
-			PreparedStatement stmt = this.connection.prepareStatement(sql);
+			PreparedStatement stmt = connection(ConnectionFactory.getConnection()).prepareStatement(sql);
 			stmt.setLong(1, id);
 			ResultSet rs = stmt.executeQuery();
-			
+
 			if(rs.next()) {
 				cliente = new Cliente();
 				cliente.setId(rs.getLong("id"));
@@ -54,7 +55,7 @@ public class ClienteDAO {
 				cliente.setNumero(rs.getLong("numero"));
 				cliente.setBairro(rs.getString("bairro"));
 				cliente.setCidade(rs.getString("cidade"));
-				cliente.setEstado(rs.getString("estado"));				
+				cliente.setEstado(rs.getString("estado"));
 			}
 			stmt.close();
 			rs.close();
@@ -64,11 +65,12 @@ public class ClienteDAO {
 		return cliente;
 	}
 
-	public List<Cliente> getLista() {
+	@Override
+	public List<Cliente> listar() {
 		try {
 			List<Cliente> clientes = new ArrayList<>();
 			String sql = "select * from cliente";
-			PreparedStatement stmt = this.connection.prepareStatement(sql);
+			PreparedStatement stmt = connection(ConnectionFactory.getConnection()).prepareStatement(sql);
 			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
 				Cliente cliente = new Cliente();
@@ -90,10 +92,11 @@ public class ClienteDAO {
 		}
 	}
 
-	public void altera(Cliente cliente) {
+	@Override
+	public void alterar(Cliente cliente) {
 		String sql = "update cliente set nome=?, cpf=?, logradouro=?, numero=?, bairro=?, cidade=?, estado=? where id=?";
 		try {
-			PreparedStatement stmt = connection.prepareStatement(sql);
+			PreparedStatement stmt = connection(ConnectionFactory.getConnection()).prepareStatement(sql);
 			stmt.setString(1, cliente.getNome());
 			stmt.setString(2, cliente.getCpf());
 			stmt.setString(3, cliente.getLogradouro());
@@ -109,9 +112,10 @@ public class ClienteDAO {
 		}
 	}
 
-	public void remove(Long id) {
+	@Override
+	public void remover(Long id) {
 		try {
-			PreparedStatement stmt = connection.prepareStatement("delete from cliente where id=?");
+			PreparedStatement stmt = connection(ConnectionFactory.getConnection()).prepareStatement("delete from cliente where id=?");
 			stmt.setLong(1, id);
 			stmt.execute();
 			stmt.close();

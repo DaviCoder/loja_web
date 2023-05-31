@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import br.ucsal.loja.dao.ClienteDAO;
+import br.ucsal.loja.dao.IDAO;
+import br.ucsal.loja.factories.DAOFactorySingleton;
 import br.ucsal.loja.model.Cliente;
 /**
 
@@ -20,6 +22,7 @@ import br.ucsal.loja.model.Cliente;
 @WebServlet("/DeletarClienteServlet")
 public class DeletarClienteServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private DAOFactorySingleton daoFactorySingleton = DAOFactorySingleton.getInstance();
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -34,10 +37,10 @@ public class DeletarClienteServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Long id = Long.parseLong(request.getParameter("id")); 
-		ClienteDAO dao = new ClienteDAO();
-		dao.remove(id);
+		IDAO dao = daoFactorySingleton.getClienteDAO();
+		dao.remover(id);
 		
-		List<Cliente> lista = dao.getLista();
+		List<Cliente> lista = dao.listar();
 		request.setAttribute("clientes", lista);
 		response.sendRedirect("ListarClientesServlet");
 //		RequestDispatcher requestDispatcher = request.getRequestDispatcher("ListarClientes.jsp");

@@ -35,7 +35,7 @@ public class IndexServlet  extends HttpServlet{
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		ProdutoDAO dao =  new ProdutoDAO();
-		List<Produto> produtos  = dao.getLista();
+		List<Produto> produtos  = dao.listar();
 		request.setAttribute("produtos", produtos);
 		RequestDispatcher requestDispatcher =   request.getRequestDispatcher("index.jsp");
 		requestDispatcher.forward(request, response);

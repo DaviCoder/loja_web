@@ -8,7 +8,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import br.ucsal.loja.dao.IDAO;
 import br.ucsal.loja.dao.ProdutoDAO;
+import br.ucsal.loja.factories.DAOFactorySingleton;
 import br.ucsal.loja.model.Produto;
 
 /**
@@ -18,6 +20,7 @@ import br.ucsal.loja.model.Produto;
 @WebServlet("/AlterarProdutoServlet")
 public class AlterarProdutoServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private DAOFactorySingleton daoFactorySingleton = DAOFactorySingleton.getInstance();
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -43,8 +46,8 @@ public class AlterarProdutoServlet extends HttpServlet {
 		produto.setEmail("email");
 		produto.setDescription("description");
 		produto.setStatus("status");
-		ProdutoDAO dao=new ProdutoDAO();
-		dao.altera(produto);
+		IDAO dao= daoFactorySingleton.getProdutoDAO();
+		dao.alterar(produto);
 		
 	}
 

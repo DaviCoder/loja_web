@@ -1,6 +1,5 @@
 package br.ucsal.loja.dao;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -9,18 +8,12 @@ import java.util.List;
 
 import br.ucsal.loja.model.Produto;
 
-public class ProdutoDAO {
-
-	private Connection connection;
-
-	public ProdutoDAO() {
-		this.connection = ConnectionFactory.getConnection();
-	}
-
+public class ProdutoDAO implements IDAO<Produto> {
+	@Override
 	public void inserir(Produto produto) {
 		String sql = "insert into produto (name,  status,  email,  description) values (?,?,?,?)";
 		try {
-			PreparedStatement stmt = connection.prepareStatement(sql);
+			PreparedStatement stmt = connection(ConnectionFactory.getConnection()).prepareStatement(sql);
 			stmt.setString(1, produto.getName());
 			stmt.setString(2, produto.getStatus());
 			stmt.setString(3, produto.getEmail());
@@ -33,11 +26,12 @@ public class ProdutoDAO {
 
 	}
 
-	public List<Produto> getLista() {
+	@Override
+	public List<Produto> listar() {
 		try {
 			List<Produto> produtos = new ArrayList<>();
 			String sql = "select * from produto";
-			PreparedStatement stmt = this.connection.prepareStatement(sql);
+			PreparedStatement stmt = connection(ConnectionFactory.getConnection()).prepareStatement(sql);
 			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
 				Produto produto = new Produto();
@@ -56,11 +50,12 @@ public class ProdutoDAO {
 		}
 	}
 
+	@Override
 	public Produto obter(Long id) {
 		Produto produto = null;
 		String sql = "select (id,name, status, email, description) where id=?";
 		try {
-			PreparedStatement stmt = connection.prepareStatement(sql);
+			PreparedStatement stmt = connection(ConnectionFactory.getConnection()).prepareStatement(sql);
 			stmt.setLong(1, id);
 			ResultSet rs = stmt.executeQuery();
 			if (rs.next()) {
@@ -80,10 +75,11 @@ public class ProdutoDAO {
 
 	}
 
-	public void altera(Produto produto) {
+	@Override
+	public void alterar(Produto produto) {
 		String sql = "update dia set name=? status=? email=? description=? where id=?";
 		try {
-			PreparedStatement stmt = connection.prepareStatement(sql);
+			PreparedStatement stmt = connection(ConnectionFactory.getConnection()).prepareStatement(sql);
 			stmt.setString(1, produto.getName());
 			stmt.setString(2, produto.getStatus());
 			stmt.setString(3, produto.getEmail());
@@ -96,10 +92,11 @@ public class ProdutoDAO {
 		}
 	}
 
-	public void remove(Produto produto) {
+	@Override
+	public void remover(Long id) {
 		try {
-			PreparedStatement stmt = connection.prepareStatement("delete from produto where id=?");
-			stmt.setLong(1, produto.getId());
+			PreparedStatement stmt = connection(ConnectionFactory.getConnection()).prepareStatement("delete from produto where id=?");
+			stmt.setLong(1, id);
 			stmt.execute();
 			stmt.close();
 		} catch (SQLException e) {
