@@ -15,6 +15,7 @@ public class ClienteDAO {
 
 	public ClienteDAO() {
 		this.connection = ConnectionFactory.getConnection();
+	
 	}
 
 	public void inserir(Cliente cliente) {

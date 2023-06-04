@@ -7,7 +7,6 @@ public class UsuarioDAO {
 
 	
 	public Usuario login(String email, String senha) {
-		//TODO Usuario Fake Mock
 		Usuario usuario = new Usuario();
 		usuario.setEmail(email);
 		//usuario.se
